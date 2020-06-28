@@ -1,0 +1,10 @@
+  Search: 
+  <input ng-model='$ctrl.query' /> 
+    <ul> 
+        <li ng-repeat='recipe in $ctrl.recipes | filter:$ctrl.query'> 
+            <a href='#!/detail/{{recipe.id}}'> 
+                <span>{{recipe.name}}</span> 
+                <p>{{recipe.time}}</p> 
+            </a> 
+        </li> 
+    </ul>

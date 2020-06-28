@@ -1,6 +1,6 @@
 
 <!doctype html>
-<html lang='en' ng-app='recipesApp'>
+<html lang='de' ng-app='recipesApp'>
   <head>
     <meta charset='utf-8'>
     <title>
@@ -8,8 +8,68 @@
     </title>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js'></script>
-    <script src='https://raw.githubusercontent.com/andrebrand/arduino_server/master/app.js'></script>
-    
+    <script>
+        var isLive = false;
+        getTemplateUrl = function(name){
+          if (isLive) {
+            name = 'template?template=' + name
+          } else {
+            name = name + '.html'
+          }
+          return name;
+        };
+        // Define the `recipesApp` module
+        var recipesApp = angular.module('recipesApp', ['ngRoute']);
+        
+        angular.
+        module('recipesApp').
+        config(['$routeProvider',
+            function config($routeProvider) {
+            $routeProvider.
+                when('/detail/:recipeId', {
+                template: '<recipe-detail></recipe-detail>'
+                }).
+                when('/', {
+                template: '<recipe-list></recipe-list>'
+                }).
+                otherwise('/');
+            }
+        ]);
+
+        angular.
+        module('recipesApp').
+        component('recipeDetail', {  // This name is what AngularJS uses to match to the `<recipe>` element.
+            templateUrl: getTemplateUrl('recipeDetail'),
+            controller: ['$routeParams', function IngredientsListController($routeParams) {
+                this.id = $routeParams.recipeId;
+                this.recipe = [
+                    {name: 'Nudeln'},
+                    {name: 'Reis'}
+                ];
+            }]
+        });
+
+        angular.
+        module('recipesApp').
+        component('recipeList', {  // This name is what AngularJS uses to match to the `<recipe-list>` element.
+            templateUrl: getTemplateUrl('recipeList'),
+            controller: function RecipesList() {
+                this.recipes = [
+                    {
+                        name: 'Nudeln',
+                        time: '15 min',
+                        id: 0
+                    }, 
+                    {
+                        name: 'Reis',
+                        time: '30min',
+                        id: 1
+                    }
+                ];
+            }
+        });
+    </script>
+
 
   </head>
     <body>
