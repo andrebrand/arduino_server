@@ -1,0 +1,17 @@
+{
+    "recipes": [
+        {
+            "name": "Nudeln",
+            "ingredients": [
+                {
+                    "name": "Salz",
+                    "amount": "100g"
+                },
+                {
+                    "name": "Zucker",
+                    "amount": "200g"
+                }
+            ]
+        }
+    ]
+}
