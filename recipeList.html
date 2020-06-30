@@ -2,9 +2,25 @@
   <input ng-model='$ctrl.query' /> 
     <ul> 
         <li ng-repeat='recipe in $ctrl.recipes | filter:$ctrl.query'> 
-            <a href='#!/detail/{{recipe.id}}'> 
-                <span>{{recipe.name}}</span> 
-                <p>{{recipe.time}}</p> 
+            <a href='#!/detail/{{recipe.id}}'>
+                <div class="card">
+                    <div class="card-image">
+
+                    </div>
+                    <div class="card-text">
+                        <div class="card-text-headline">
+                            {{recipe.name}}
+                        </div>
+                        <div class="card-text-text">
+                            {{recipe.shortDescription}}
+                        </div>
+                        <div class="card-text-icons">
+
+                        </div>
+                    </div>
+                    <span>{{recipe.name}}</span> 
+                    <p>{{recipe.time}}</p> 
+                </div>
             </a> 
         </li> 
     </ul>

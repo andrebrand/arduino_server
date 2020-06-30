@@ -1,79 +1,123 @@
-
 <!doctype html>
 <html lang='de' ng-app='recipesApp'>
-  <head>
+
+<head>
     <meta charset='utf-8'>
     <title>
         Rezepte APP
     </title>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js'></script>
     <script src='https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular-route.js'></script>
+    <link rel="stylesheet" href="style.css">
+
     <script>
         var isLive = false;
-        getTemplateUrl = function(name){
-          if (isLive) {
-            name = 'template?template=' + name
-          } else {
-            name = name + '.html'
-          }
-          return name;
+        var getTemplate = function (name, postfix) {
+            var template = '';
+            var xhttp = new XMLHttpRequest();
+            var filePostFix = '.html';
+            if(postfix){
+                filePostFix = postfix;
+            }
+            if (isLive) {
+                xhttp.open('GET', 'https://raw.githubusercontent.com/andrebrand/arduino_server/master/' + name + filePostFix, false);
+            } else {
+                xhttp.open('GET', name + filePostFix, false);
+            }
+
+            xhttp.send();
+            template = xhttp.responseText;
+            return template;
+        };
+
+        var loadSVG = function (e) {
+            console.log(e);
         };
         // Define the `recipesApp` module
         var recipesApp = angular.module('recipesApp', ['ngRoute']);
-        
+
         angular.
-        module('recipesApp').
-        config(['$routeProvider',
-            function config($routeProvider) {
-            $routeProvider.
-                when('/detail/:recipeId', {
-                template: '<recipe-detail></recipe-detail>'
-                }).
-                when('/', {
-                template: '<recipe-list></recipe-list>'
-                }).
-                otherwise('/');
-            }
-        ]);
+            module('recipesApp').
+            config(['$routeProvider',
+                function config($routeProvider) {
+                    $routeProvider.
+                        when('/detail/:recipeId', {
+                            template: '<app-nav></app-nav><main><recipe-detail></recipe-detail></main>'
+                        }).
+                        when('/', {
+                            template: '<app-nav></app-nav><main><recipe-list></recipe-list></main>'
+                        }).
+                        otherwise('/');
+                }
+            ]);
+
+
 
         angular.
         module('recipesApp').
-        component('recipeDetail', {  // This name is what AngularJS uses to match to the `<recipe>` element.
-            templateUrl: getTemplateUrl('recipeDetail'),
-            controller: ['$routeParams', function IngredientsListController($routeParams) {
-                this.id = $routeParams.recipeId;
-                this.recipe = [
-                    {name: 'Nudeln'},
-                    {name: 'Reis'}
-                ];
+        component('appLogo', {  // This name is what AngularJS uses to match to the `<recipe>` element.
+            template: getTemplate('logo'),
+            controller: [ function Logo() {
+            }]
+        });
+        
+        angular.
+        module('recipesApp').
+        component('iconSearch', {  // This name is what AngularJS uses to match to the `<recipe>` element.
+            template: getTemplate('/images/search', '.svg'),
+            controller: [ function icon() {
             }]
         });
 
         angular.
         module('recipesApp').
-        component('recipeList', {  // This name is what AngularJS uses to match to the `<recipe-list>` element.
-            templateUrl: getTemplateUrl('recipeList'),
-            controller: function RecipesList() {
-                this.recipes = [
-                    {
-                        name: 'Nudeln',
-                        time: '15 min',
-                        id: 0
-                    }, 
-                    {
-                        name: 'Reis',
-                        time: '30min',
-                        id: 1
-                    }
-                ];
-            }
+        component('appNav', {  // This name is what AngularJS uses to match to the `<recipe>` element.
+            template: getTemplate('nav'),
+            controller: [ function nav() {
+            }]
         });
+
+
+
+        angular.
+            module('recipesApp').
+            component('recipeDetail', {  // This name is what AngularJS uses to match to the `<recipe>` element.
+                template: getTemplate('recipeDetail'),
+                controller: ['$routeParams', function IngredientsListController($routeParams) {
+                    this.id = $routeParams.recipeId;
+                    this.recipe = [
+                        { name: 'Nudeln' },
+                        { name: 'Reis' }
+                    ];
+                }]
+            });
+
+
+        angular.
+            module('recipesApp').
+            component('recipeList', {  // This name is what AngularJS uses to match to the `<recipe-list>` element.
+                template: getTemplate('recipeList'),
+                controller: function RecipesList() {
+                    this.recipes = [
+                        {
+                            name: 'Nudeln',
+                            time: '15 min',
+                            id: 0
+                        },
+                        {
+                            name: 'Reis',
+                            time: '30min',
+                            id: 1
+                        }
+                    ];
+                }
+            });
     </script>
+</head>
 
 
-  </head>
-    <body>
-        <div ng-view></div>
+<body>
+    <div ng-view></div>
+</body>
 
-    </body>
 </html>
